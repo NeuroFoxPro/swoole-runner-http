@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# Путь к файлу composer.json
+COMPOSER_FILE="composer.json"
+
+# Проверяем существование файла
+if [ ! -f "$COMPOSER_FILE" ]; then
+    echo "Error: composer.json not found"
+    exit 1
+fi
+
+# Получаем текущую версию из composer.json
+CURRENT_VERSION=$(grep -oP '"version": "\K[^"]+' "$COMPOSER_FILE")
+
+# Разбиваем версию на компоненты
+IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_VERSION"
+MAJOR="${VERSION_PARTS[0]}"
+MINOR="${VERSION_PARTS[1]}"
+PATCH="${VERSION_PARTS[2]}"
+
+# Увеличиваем патч-версию
+PATCH=$((PATCH+1))
+
+# Формируем новую версию
+NEW_VERSION="$MAJOR.$MINOR.$PATCH"
+
+# Обновляем версию в composer.json
+sed -i "s/\"version\": \"$CURRENT_VERSION\"/\"version\": \"$NEW_VERSION\"/" "$COMPOSER_FILE"
+
+# Добавляем измененный composer.json в индекс
+git add "$COMPOSER_FILE"
+
+echo "Version bumped from $CURRENT_VERSION to $NEW_VERSION"

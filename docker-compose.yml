@@ -1,0 +1,13 @@
+services:
+  app:
+    image: 4erk/swoole-app:dev
+    environment:
+      AUTORELOAD_PROGRAMS: "swoole"
+      AUTORELOAD_ANY_FILES: 0
+      PHP_IDE_CONFIG: "serverName=swoole"
+      XDEBUG_SESSION: "PHPSTORM"
+      SWOOLE_TIMEZONE: "UTC"
+    volumes:
+      - ./:/var/www
+    ports:
+      - "80:9501"
