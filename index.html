@@ -1,0 +1,38 @@
+<html lang="ru">
+<header>
+    <title>test</title>
+</header>
+<body>
+<form action="/test" method="post">
+    <label>
+        <input name="test">
+    </label>
+    <button type="submit">Submit</button>
+</form>
+
+<form action="/test" enctype="multipart/form-data" method="post">
+    <label>
+        <input name="test[blur][]" multiple="multiple" type="file">
+    </label>
+    <button type="submit">Submit</button>
+</form>
+
+<button onclick="testBodyPost()">Test Body</button>
+<script>
+    function testBodyPost() {
+        fetch('/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                test: 'test'
+            })
+        })
+       .then(response => response.json())
+       .then(data => console.log(data))
+       .catch(error => console.error('Error:', error));
+    }
+</script>
+</body>
+</html>
